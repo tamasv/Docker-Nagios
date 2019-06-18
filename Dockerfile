@@ -87,16 +87,6 @@ RUN ( egrep -i "^${NAGIOS_GROUP}"    /etc/group || groupadd $NAGIOS_GROUP    )  
 RUN ( id -u $NAGIOS_USER    || useradd --system -d $NAGIOS_HOME -g $NAGIOS_GROUP    $NAGIOS_USER    )  && \
     ( id -u $NAGIOS_CMDUSER || useradd --system -d $NAGIOS_HOME -g $NAGIOS_CMDGROUP $NAGIOS_CMDUSER )
 
-RUN cd /tmp                                           && \
-    git clone https://github.com/multiplay/qstat.git  && \
-    cd qstat                                          && \
-    ./autogen.sh                                      && \
-    ./configure                                       && \
-    make                                              && \
-    make install                                      && \
-    make clean                                        && \
-    cd /tmp && rm -Rf qstat
-
 RUN cd /tmp                                                                          && \
     git clone https://github.com/NagiosEnterprises/nagioscore.git -b $NAGIOS_BRANCH  && \
     cd nagioscore                                                                    && \
