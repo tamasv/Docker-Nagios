@@ -1,5 +1,5 @@
-FROM ubuntu:16.04
-MAINTAINER Jason Rivers <jason@jasonrivers.co.uk>
+FROM ubuntu:18.04
+MAINTAINER Tamas Varga <tamas@alapzaj.com> 
 
 ENV NAGIOS_HOME            /opt/nagios
 ENV NAGIOS_USER            nagios
@@ -47,14 +47,13 @@ RUN echo postfix postfix/main_mailer_type string "'Internet Site'" | debconf-set
         libdbd-mysql-perl                   \
         libdbi-dev                          \
         libdbi-perl                         \
-        libfreeradius-client-dev            \
-        libgd2-xpm-dev                      \
+        libgd-dev                           \
         libgd-gd2-perl                      \
         libjson-perl                        \
         libldap2-dev                        \
         libmysqlclient-dev                  \
         libnagios-object-perl               \
-        libnagios-plugin-perl               \
+        libmonitoring-plugin-perl           \
         libnet-snmp-perl                    \
         libnet-snmp-perl                    \
         libnet-tftp-perl                    \
