@@ -20,6 +20,7 @@ ENV NG_CGI_URL             /cgi-bin
 ENV NAGIOS_BRANCH          nagios-4.4.3
 ENV NAGIOS_PLUGINS_BRANCH  release-2.2.1
 ENV NRPE_BRANCH            nrpe-3.2.1
+ENV NRDP_BRANCH            2.0.0
 
 
 RUN echo postfix postfix/main_mailer_type string "'Internet Site'" | debconf-set-selections  && \
@@ -123,14 +124,28 @@ RUN cd /tmp                                                                     
     ln -sf ${NAGIOS_HOME}/libexec/utils.pm /usr/lib/nagios/plugins                            && \
     cd /tmp && rm -Rf nagios-plugins
 
+
 RUN wget -O ${NAGIOS_HOME}/libexec/check_ncpa.py https://raw.githubusercontent.com/NagiosEnterprises/ncpa/v2.0.5/client/check_ncpa.py  && \
     chmod +x ${NAGIOS_HOME}/libexec/check_ncpa.py
+
+RUN cd /tmp                                                                  && \
+    git clone https://github.com/NagiosEnterprises/nrdp.git -b $NRDP_BRANCH  && \
+    cd nrdp                                                                  && \
+    mkdir /usr/local/nrdp                                                    && \
+    mkdir -p /orig/nrdp                                                      && \
+    cp -r clients server LICENSE* CHANGES* /usr/local/nrdp                   && \
+    cp -r server /orig/nrdp                                                  && \
+    cp nrdp.conf /etc/apache2/sites-enabled/nrdp.conf                        && \
+    sed -i '/Order allow,deny/c\ #' /etc/apache2/sites-enabled/nrdp.conf     && \
+    sed -i '/Allow from all/c\Require all granted' /etc/apache2/sites-enabled/nrdp.conf && \
+    cd /tmp && rm -Rf nrdp
+
 
 RUN cd /tmp                                                                  && \
     git clone https://github.com/NagiosEnterprises/nrpe.git -b $NRPE_BRANCH  && \
     cd nrpe                                                                  && \
     ./configure                                   \
-        --with-ssl=/usr/bin/openssl               \
+         --with-ssl=/usr/bin/openssl               \
         --with-ssl-lib=/usr/lib/x86_64-linux-gnu  \
                                                                              && \
     make check_nrpe                                                          && \
