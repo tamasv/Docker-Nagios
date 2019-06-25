@@ -14,9 +14,9 @@ if [ -z "$(ls -A /opt/nagios/var)" ]; then
     cp -Rp /orig/var/* /opt/nagios/var/
 fi
 
-if [ -z "$(ls -A /opt/nrdp/server)" ]; then
+if [ -z "$(ls -A /usr/local/nrdp/server)" ]; then
     echo "Started with NRDP server directory, copying example data in-place"
-    cp -Rp /orig/nrdp/server/* /opt/nrdp/server/
+    cp -Rp /orig/nrdp/server/* /usr/local/nrdp/server/
 fi
 
 
