@@ -1,5 +1,0 @@
-#!/bin/bash
-
-export TZ="${NAGIOS_TIMEZONE}"
-
-exec nginx -g daemon off;
