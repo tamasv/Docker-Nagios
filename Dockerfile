@@ -135,8 +135,8 @@ RUN cd /tmp                                                                  && 
     cp -r clients server LICENSE* CHANGES* /usr/local/nrdp                   && \
     cp -r server /orig/nrdp                                                  && \
     cp nrdp.conf /etc/apache2/sites-enabled/nrdp.conf                        && \
-    sed -i '/Order allow,deny/c\ #' /etc/apache2/sites-enabled/nrdp.conf     && \
-    sed -i '/Allow from all/c\Require all granted' /etc/apache2/sites-enabled/nrdp.conf && \
+#    sed -i '/Order allow,deny/c\ #' /etc/apache2/sites-enabled/nrdp.conf     && \
+#    sed -i '/Allow from all/c\Require all granted' /etc/apache2/sites-enabled/nrdp.conf && \
     cd /tmp && rm -Rf nrdp
 
 
@@ -182,9 +182,7 @@ RUN sed -i.bak 's/.*\=www\-data//g' /etc/apache2/envvars
 RUN export DOC_ROOT="DocumentRoot $(echo $NAGIOS_HOME/share)"                         && \
     sed -i "s,DocumentRoot.*,$DOC_ROOT," /etc/apache2/sites-enabled/000-default.conf  && \
     sed -i "s,</VirtualHost>,<IfDefine ENABLE_USR_LIB_CGI_BIN>\nScriptAlias /cgi-bin/ ${NAGIOS_HOME}/sbin/\n</IfDefine>\n</VirtualHost>," /etc/apache2/sites-enabled/000-default.conf  && \
-    ln -s /etc/apache2/mods-available/cgi.load /etc/apache2/mods-enabled/cgi.load && \
-    grep -v "AuthType" /etc/apache2/sites-available/nagios.conf > /tmp/nagios.conf && \
-    mv /tmp/nagios.conf /etc/apache2/sites-available/nagios.conf
+    ln -s /etc/apache2/mods-available/cgi.load /etc/apache2/mods-enabled/cgi.load 
 
 RUN mkdir -p -m 0755 /usr/share/snmp/mibs                     && \
     mkdir -p         ${NAGIOS_HOME}/etc/conf.d                && \
@@ -221,8 +219,6 @@ RUN a2enmod session         && \
     a2enmod session_crypto  && \
     a2enmod auth_form       && \
     a2enmod request
-
-RUN cp /opt/conf/apache2/nagios.conf /etc/apache2/sites-available/nagios.conf
 
 RUN chmod +x /usr/local/bin/start_nagios        && \
     chmod +x /etc/sv/apache/run                 && \
